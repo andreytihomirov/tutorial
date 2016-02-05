@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          jcr:primaryType="cq:Dialog"
+          activeTab="{Long}0"
+          xtype="tabpanel">
+    <items jcr:primaryType="cq:WidgetCollection">
+        <tab
+                jcr:primaryType="cq:Panel"
+                title="Search Pages">
+            <items jcr:primaryType="cq:WidgetCollection">
+                <title jcr:primaryType="cq:Widget"
+                       fieldLabel="Title"
+                       name="./title"
+                       xtype="textfield"/>
+                <htmlTag jcr:primaryType="cq:Widget"
+                         fieldLabel="HTML Tag"
+                         allowBlank="false"
+                         name="./htmlTag"
+                         type="select"
+                         xtype="selection">
+                    <options jcr:primaryType="cq:WidgetCollection">
+                        <h1
+                                jcr:primaryType="nt:unstructured"
+                                text="H1"
+                                value="h1"/>
+                        <h2
+                                jcr:primaryType="nt:unstructured"
+                                text="H2"
+                                value="h2"/>
+                        <h3
+                                jcr:primaryType="nt:unstructured"
+                                text="H3"
+                                value="h3"/>
+                        <h4
+                                jcr:primaryType="nt:unstructured"
+                                text="H4"
+                                value="h4"/>
+                        <h5
+                                jcr:primaryType="nt:unstructured"
+                                text="H5"
+                                value="h5"/>
+                        <h6
+                                jcr:primaryType="nt:unstructured"
+                                text="H6"
+                                value="h6"/>
+                    </options>
+                </htmlTag>
+                <pageCount jcr:primaryType="cq:Widget"
+                           fieldLabel="Page Count"
+                           name="./pageCount"
+                           minValue="0"
+                           xtype="numberfield"/>
+                <tags jcr:primaryType="cq:Widget"
+                      fieldLabel="Tag for searching"
+                      allowBlank="false"
+                      name="./tags"
+                      xtype="tags"/>
+            </items>
+        </tab>
+    </items>
+</jcr:root>
