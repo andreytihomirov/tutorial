@@ -3,7 +3,7 @@ package com.tutorial.components.searchPages.model;
 /**
  * Created by andrey.tihomirov on 04.02.2016.
  */
-public class Page {
+public class CustomPage {
 
     private String title;
 

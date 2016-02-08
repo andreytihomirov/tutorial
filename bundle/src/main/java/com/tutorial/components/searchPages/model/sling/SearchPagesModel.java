@@ -1,9 +1,11 @@
-package com.tutorial.components.searchPages.model;
+package com.tutorial.components.searchPages.model.sling;
 
+import com.tutorial.components.searchPages.model.CustomPage;
 import com.tutorial.components.searchPages.services.SearchPagesService;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,11 +33,14 @@ public class SearchPagesModel {
     @Inject
     private String[] tags;
 
-    private List<Page> pages;
+    @Self
+    private Resource currentResource;
+
+    private List<CustomPage> customPages;
 
     @PostConstruct
     public void activate() {
-        pages = searchPagesService.searchPagesByTag(tags[0], pageCount);
+        customPages = searchPagesService.searchPagesByTag(tags[0], pageCount, currentResource);
     }
 
     public String getTitle() {
@@ -70,11 +75,11 @@ public class SearchPagesModel {
         this.tags = tags;
     }
 
-    public List<Page> getPages() {
-        return pages;
+    public List<CustomPage> getCustomPages() {
+        return customPages;
     }
 
-    public void setPages(List<Page> pages) {
-        this.pages = pages;
+    public void setCustomPages(List<CustomPage> customPages) {
+        this.customPages = customPages;
     }
 }

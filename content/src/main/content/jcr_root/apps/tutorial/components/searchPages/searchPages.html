@@ -1,8 +1,12 @@
-<div data-sly-use.searchPagesComponent="com.tutorial.components.searchPages.model.SearchPagesModel">
-    <ul data-sly-list.page="${searchPagesComponent.pages}">
+<div data-sly-use.searchPagesComponent="com.tutorial.components.searchPages.model.sling.SearchPagesModel">
+
+    <h1 data-sly-element="${searchPagesComponent.htmlTag}">${searchPagesComponent.title}</h1>
+
+    <ul data-sly-list.page="${searchPagesComponent.customPages}">
         <li>
             <a data-sly-attribute.href="${page.link @ extension='html'}">${page.title}</a>
         </li>
     </ul>
+
 </div>
 

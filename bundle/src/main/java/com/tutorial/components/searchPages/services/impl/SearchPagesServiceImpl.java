@@ -1,11 +1,13 @@
 package com.tutorial.components.searchPages.services.impl;
 
-import com.tutorial.components.searchPages.model.Page;
+import com.day.cq.wcm.api.Page;
+import com.tutorial.components.searchPages.model.CustomPage;
 import com.tutorial.components.searchPages.services.SearchPagesService;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.LoginException;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.slf4j.Logger;
@@ -30,13 +32,15 @@ public class SearchPagesServiceImpl implements SearchPagesService {
 
     private static final Logger log = LoggerFactory.getLogger(SearchPagesServiceImpl.class);
 
+    private String path;
+
     @Reference
     private ResourceResolverFactory resourceResolverFactory;
 
     @Override
-    public List<Page> searchPagesByTag(String tag, int pageCount) {
+    public List<CustomPage> searchPagesByTag(String tag, int pageCount, Resource currentResource) {
 
-        List<Page> pages = null;
+        List<CustomPage> customPages = null;
         ResourceResolver resourceResolver = null;
 
         try {
@@ -54,20 +58,21 @@ public class SearchPagesServiceImpl implements SearchPagesService {
                 try {
                     queryManager = session.getWorkspace().getQueryManager();
                     if(queryManager != null) {
-                        String sql = "SELECT * FROM [nt:base] WHERE ISDESCENDANTNODE([/content/geometrixx-outdoors]) and CONTAINS([cq:tags], '" + tag + "')";
+                        prepareSearchPath(currentResource);
+                        String sql = "SELECT * FROM [nt:base] WHERE ISDESCENDANTNODE([" + path + "]) and CONTAINS([cq:tags], '" + tag + "')";
                         Query query = queryManager.createQuery(sql, Query.JCR_SQL2);
                         query.setLimit(pageCount);
                         QueryResult result = query.execute();
                         NodeIterator nodeIterator = result.getNodes();
 
                         if(nodeIterator.hasNext()) {
-                            pages = new ArrayList<Page>();
+                            customPages = new ArrayList<CustomPage>();
                             while(nodeIterator.hasNext()) {
                                 Node node = nodeIterator.nextNode();
-                                Page page = new Page();
-                                page.setTitle(node.getProperty("jcr:title").getString());
-                                page.setLink(node.getPath());
-                                pages.add(page);
+                                CustomPage customPage = new CustomPage();
+                                customPage.setTitle(node.getProperty("jcr:title").getString());
+                                customPage.setLink(node.getParent().getPath());
+                                customPages.add(customPage);
                             }
                         }
                     }
@@ -77,7 +82,21 @@ public class SearchPagesServiceImpl implements SearchPagesService {
             }
         }
 
-        return pages;
+        return customPages;
+    }
+
+    private void prepareSearchPath(Resource resource) {
+        Page page;
+        page = resource.adaptTo(Page.class);
+
+        if(page != null) {
+            com.day.cq.wcm.api.Page absoluteParent = page.getAbsoluteParent(1);
+            if(absoluteParent != null) {
+                path = absoluteParent.getPath();
+            }
+        } else {
+            prepareSearchPath(resource.getParent());
+        }
     }
 
 }

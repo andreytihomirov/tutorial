@@ -54,7 +54,14 @@
                       fieldLabel="Tag for searching"
                       allowBlank="false"
                       name="./tags"
-                      xtype="tags"/>
+                      xtype="tags">
+                    <listeners jcr:primaryType="nt:unstructured"
+                               addtag="function(field, tag){
+                                            if (field.getTags().length  > 1) {
+                                            field.removeTag(tag);
+                                            }
+                                        }"/>
+                </tags>
             </items>
         </tab>
     </items>
