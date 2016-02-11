@@ -1,7 +1,5 @@
 package com.tutorial.components.searchPages.services.impl;
 
-import com.day.cq.wcm.api.Page;
-import com.tutorial.components.searchPages.model.CustomPage;
 import com.tutorial.components.searchPages.services.SearchPagesService;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
@@ -32,17 +30,18 @@ public class SearchPagesServiceImpl implements SearchPagesService {
 
     private static final Logger log = LoggerFactory.getLogger(SearchPagesServiceImpl.class);
 
-    private String path;
+    // old task
+    // private String path;
 
     @Reference
     private ResourceResolverFactory resourceResolverFactory;
 
+    // new task
     @Override
-    public List<CustomPage> searchPagesByTag(String tag, int pageCount, Resource currentResource) {
+    public List<String> searchPagesByTag(int width, int height, Resource currentResource) {
+        List<String> imagePaths = null;
 
-        List<CustomPage> customPages = null;
         ResourceResolver resourceResolver = null;
-
         try {
             resourceResolver = resourceResolverFactory.getAdministrativeResourceResolver(null);
         } catch (LoginException e) {
@@ -58,21 +57,17 @@ public class SearchPagesServiceImpl implements SearchPagesService {
                 try {
                     queryManager = session.getWorkspace().getQueryManager();
                     if(queryManager != null) {
-                        prepareSearchPath(currentResource);
-                        String sql = "SELECT * FROM [nt:base] WHERE ISDESCENDANTNODE([" + path + "]) and CONTAINS([cq:tags], '" + tag + "')";
+                        String sql = "SELECT * FROM [nt:base] AS s WHERE ISDESCENDANTNODE([/content/dam]) and CONTAINS" +
+                                "(s.*, 'thumbnail." + width + "." + height +".png')";
                         Query query = queryManager.createQuery(sql, Query.JCR_SQL2);
-                        query.setLimit(pageCount);
                         QueryResult result = query.execute();
                         NodeIterator nodeIterator = result.getNodes();
 
                         if(nodeIterator.hasNext()) {
-                            customPages = new ArrayList<CustomPage>();
+                            imagePaths = new ArrayList<String>();
                             while(nodeIterator.hasNext()) {
-                                Node node = nodeIterator.nextNode();
-                                CustomPage customPage = new CustomPage();
-                                customPage.setTitle(node.getProperty("jcr:title").getString());
-                                customPage.setLink(node.getParent().getPath());
-                                customPages.add(customPage);
+                                String imagePath = nodeIterator.nextNode().getPath();
+                                imagePaths.add(imagePath);
                             }
                         }
                     }
@@ -82,21 +77,72 @@ public class SearchPagesServiceImpl implements SearchPagesService {
             }
         }
 
-        return customPages;
+
+        return imagePaths;
     }
 
-    private void prepareSearchPath(Resource resource) {
-        Page page;
-        page = resource.adaptTo(Page.class);
+    // old task
+    // @Override
+//    public List<CustomPage> searchPagesByTag(String tag, int pageCount, Resource currentResource) {
+//
+//        List<CustomPage> customPages = null;
+//        ResourceResolver resourceResolver = null;
+//
+//        try {
+//            resourceResolver = resourceResolverFactory.getAdministrativeResourceResolver(null);
+//        } catch (LoginException e) {
+//            log.error("Can't instantiate resourceResolver");
+//        }
+//
+//        if(resourceResolver != null) {
+//
+//            Session session = resourceResolver.adaptTo(Session.class);
+//
+//            if(session != null) {
+//                QueryManager queryManager;
+//                try {
+//                    queryManager = session.getWorkspace().getQueryManager();
+//                    if(queryManager != null) {
+//                        prepareSearchPath(currentResource);
+//                        String sql = "SELECT * FROM [nt:base] WHERE ISDESCENDANTNODE([" + path + "]) and CONTAINS([cq:tags], '" + tag + "')";
+//                        Query query = queryManager.createQuery(sql, Query.JCR_SQL2);
+//                        query.setLimit(pageCount);
+//                        QueryResult result = query.execute();
+//                        NodeIterator nodeIterator = result.getNodes();
+//
+//                        if(nodeIterator.hasNext()) {
+//                            customPages = new ArrayList<CustomPage>();
+//                            while(nodeIterator.hasNext()) {
+//                                Node node = nodeIterator.nextNode();
+//                                CustomPage customPage = new CustomPage();
+//                                customPage.setTitle(node.getProperty("jcr:title").getString());
+//                                customPage.setLink(node.getParent().getPath());
+//                                customPages.add(customPage);
+//                            }
+//                        }
+//                    }
+//                } catch (RepositoryException e) {
+//                    log.error("Repository Exception: " + e);
+//                }
+//            }
+//        }
+//
+//        return customPages;
+//    }
 
-        if(page != null) {
-            com.day.cq.wcm.api.Page absoluteParent = page.getAbsoluteParent(1);
-            if(absoluteParent != null) {
-                path = absoluteParent.getPath();
-            }
-        } else {
-            prepareSearchPath(resource.getParent());
-        }
-    }
+    // old task
+//    private void prepareSearchPath(Resource resource) {
+//        Page page;
+//        page = resource.adaptTo(Page.class);
+//
+//        if(page != null) {
+//            com.day.cq.wcm.api.Page absoluteParent = page.getAbsoluteParent(1);
+//            if(absoluteParent != null) {
+//                path = absoluteParent.getPath();
+//            }
+//        } else {
+//            prepareSearchPath(resource.getParent());
+//        }
+//    }
 
 }

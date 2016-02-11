@@ -1,6 +1,5 @@
 package com.tutorial.components.searchPages.services;
 
-import com.tutorial.components.searchPages.model.CustomPage;
 import org.apache.sling.api.resource.Resource;
 
 import java.util.List;
@@ -10,5 +9,9 @@ import java.util.List;
  */
 public interface SearchPagesService {
 
-    List<CustomPage> searchPagesByTag(String tag, int pageCount, Resource currentResource);
+    // old task
+    // List<CustomPage> searchPagesByTag(String tag, int pageCount, Resource currentResource);
+
+    // new task
+    List<String> searchPagesByTag(int width, int height, Resource currentResource);
 }

@@ -1,10 +1,19 @@
 <div data-sly-use.searchPagesComponent="com.tutorial.components.searchPages.model.sling.SearchPagesModel">
 
+    <!--old task-->
+    <!--<h1 data-sly-element="${searchPagesComponent.htmlTag}">${searchPagesComponent.title}</h1>-->
+
+    <!--<ul data-sly-list.page="${searchPagesComponent.customPages}">-->
+        <!--<li>-->
+            <!--<a data-sly-attribute.href="${page.link @ extension='html'}">${page.title || 'no title'}</a>-->
+        <!--</li>-->
+    <!--</ul>-->
+
     <h1 data-sly-element="${searchPagesComponent.htmlTag}">${searchPagesComponent.title}</h1>
 
-    <ul data-sly-list.page="${searchPagesComponent.customPages}">
+    <ul data-sly-list.imagePath="${searchPagesComponent.imagePaths}">
         <li>
-            <a data-sly-attribute.href="${page.link @ extension='html'}">${page.title || 'no title'}</a>
+            <img src="${imagePath}"/>
         </li>
     </ul>
 

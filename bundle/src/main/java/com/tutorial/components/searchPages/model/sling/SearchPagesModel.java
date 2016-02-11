@@ -1,6 +1,5 @@
 package com.tutorial.components.searchPages.model.sling;
 
-import com.tutorial.components.searchPages.model.CustomPage;
 import com.tutorial.components.searchPages.services.SearchPagesService;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
@@ -36,11 +35,19 @@ public class SearchPagesModel {
     @Self
     private Resource currentResource;
 
-    private List<CustomPage> customPages;
+    // old task
+    // private List<CustomPage> customPages;
+
+    // new task
+    private List<String> imagePaths;
 
     @PostConstruct
     public void activate() {
-        customPages = searchPagesService.searchPagesByTag(tags[0], pageCount, currentResource);
+        // new task
+        imagePaths = searchPagesService.searchPagesByTag(100, 100, currentResource);
+
+        // old task
+        // customPages = searchPagesService.searchPagesByTag(tags[0], pageCount, currentResource);
     }
 
     public String getTitle() {
@@ -75,11 +82,11 @@ public class SearchPagesModel {
         this.tags = tags;
     }
 
-    public List<CustomPage> getCustomPages() {
-        return customPages;
+    public List<String> getImagePaths() {
+        return imagePaths;
     }
 
-    public void setCustomPages(List<CustomPage> customPages) {
-        this.customPages = customPages;
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
     }
 }
