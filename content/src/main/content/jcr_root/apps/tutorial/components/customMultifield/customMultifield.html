@@ -1,0 +1,16 @@
+<div data-sly-use.customMultiField="com.tutorial.components.customMultifield.model.CustomMultiField">
+
+    <div data-sly-use.clientLibs="${'/libs/granite/sightly/templates/clientlib.html'}" data-sly-unwrap/>
+    <meta data-sly-call="${clientLibs.js @ categories='xtype'}" data-sly-unwrap/>
+
+    <h1>Custom Multifield</h1>
+
+    <div>
+        <ul data-sly-list.item="${customMultiField.items}">
+            <li>
+                ${item.comboBox} : ${item.textField}
+            </li>
+        </ul>
+    </div>
+
+</div>
